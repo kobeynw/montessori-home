@@ -1,32 +1,38 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/common/Header';
+import Footer from './components/common/Footer';
+import Home from './pages/Home';
 import './App.css';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <header className='App-header'>
-          <h1>Montessori Home</h1>
-        </header>
-
-        <main>
+        <Header />
+        
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/activities" element={<Activities />} />
-            <Route path="/education" element={<Education />} />
-            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/activities" element={<Placeholder title="Activities" />} />
+            <Route path="/education" element={<Placeholder title="Education" />} />
+            <Route path="/calendar" element={<Placeholder title="My Calendar" />} />
+            <Route path="/login" element={<Placeholder title="Login" />} />
           </Routes>
         </main>
+        
+        <Footer />
       </div>
     </Router>
   );
 }
 
-// Temporary placeholder components
-const Home = () => <div><h2>Home</h2><p>Welcome to Montessori Home!</p></div>;
-const Activities = () => <div><h2>Activities</h2><p>Activity repository coming soon...</p></div>;
-const Education = () => <div><h2>Education</h2><p>Educational content coming soon...</p></div>;
-const Calendar = () => <div><h2>Calendar</h2><p>Weekly planner coming soon...</p></div>;
+// Temporary placeholder component
+const Placeholder = ({ title }) => (
+  <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
+    <h1>{title}</h1>
+    <p>This page is coming soon...</p>
+  </div>
+);
 
 export default App;
