@@ -19,6 +19,10 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Activity Routes
+const activityRoutes = require('./routes/activities');
+app.use('/api/activities', activityRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   res.status(500).json({
