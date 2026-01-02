@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Home from './pages/Home';
+import Activities from './pages/Activities';
 import './App.css';
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/activities" element={<Placeholder title="Activities" />} />
+            <Route path="/activities" element={<Activities />} />
             <Route path="/education" element={<Placeholder title="Education" />} />
             <Route path="/calendar" element={<Placeholder title="My Calendar" />} />
             <Route path="/login" element={<Placeholder title="Login" />} />
