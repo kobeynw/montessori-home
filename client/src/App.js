@@ -4,6 +4,8 @@ import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Home from './pages/Home';
 import Activities from './pages/Activities';
+import Education from './pages/Education';
+import Calendar from './pages/Calendar';
 import './App.css';
 
 function App() {
@@ -16,8 +18,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/activities" element={<Activities />} />
-            <Route path="/education" element={<Placeholder title="Education" />} />
-            <Route path="/calendar" element={<Placeholder title="My Calendar" />} />
+            <Route path="/education" element={<Education />} />
+            <Route path="/calendar" element={<Calendar />} />
             <Route path="/login" element={<Placeholder title="Login" />} />
           </Routes>
         </main>
