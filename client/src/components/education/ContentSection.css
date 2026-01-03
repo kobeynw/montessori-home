@@ -1,0 +1,88 @@
+.content-section {
+  background: white;
+  border-radius: 8px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  scroll-margin-top: 100px; /* For smooth scroll offset */
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.section-icon {
+  font-size: 2.5rem;
+  margin-right: 1rem;
+}
+
+.section-header h2 {
+  margin: 0;
+  color: #1a3d32;
+  font-size: 2rem;
+}
+
+.subsection {
+  margin-bottom: 2rem;
+}
+
+.subsection h3 {
+  color: #2c5f4f;
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.subsection p {
+  line-height: 1.8;
+  color: #444;
+  font-size: 1.05rem;
+  margin: 0;
+  white-space: pre-line; /* Preserves line breaks from content */
+}
+
+.tips-box {
+  background-color: #f0f8f4;
+  border-left: 4px solid #2c5f4f;
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin-top: 2rem;
+}
+
+.tips-box h4 {
+  margin: 0 0 1rem 0;
+  color: #2c5f4f;
+  font-size: 1.2rem;
+}
+
+.tips-box ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.tips-box li {
+  margin-bottom: 0.5rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .content-section {
+    padding: 1.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .subsection h3 {
+    font-size: 1.2rem;
+  }
+
+  .subsection p {
+    font-size: 1rem;
+  }
+}
