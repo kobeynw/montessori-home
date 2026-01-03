@@ -19,14 +19,18 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Activity Routes
+// Activity routes
 const activityRoutes = require('./routes/activities');
 app.use('/api/activities', activityRoutes);
+
+// Calendar routes
+const calendarRoutes = require('./routes/calendar');
+app.use('/api/calendar', calendarRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   res.status(500).json({
-    error: 'Somehting went wrong!',
+    error: 'Something went wrong!',
     message: err.message
   });
 });
