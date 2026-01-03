@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import calendarService from '../services/calendarService';
 import DayBox from '../components/calendar/DayBox';
 import AddActivityModal from '../components/calendar/AddActivityModal';
@@ -7,6 +8,7 @@ import './Calendar.css';
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const Calendar = () => {
+    const { isAuthenticated } = useAuth();
     const [calendar, setCalendar] = useState({
         Monday: [],
         Tuesday: [],
@@ -22,8 +24,12 @@ const Calendar = () => {
     const [selectedDay, setSelectedDay] = useState(null);
 
     useEffect(() => {
-        fetchCalendar();
-    }, []);
+        if (isAuthenticated) {
+            fetchCalendar();
+        } else {
+            setLoading(false);
+        }
+    }, [isAuthenticated]);
 
     const fetchCalendar = async () => {
         setLoading(true);
@@ -39,12 +45,24 @@ const Calendar = () => {
         }
     };
 
+    const showAuthAlert = () => {
+        alert('Please login to add, edit, or complete activities in your calendar.');
+    };
+
     const handleAddClick = (day) => {
+        if (!isAuthenticated) {
+            showAuthAlert();
+            return;
+        }
         setSelectedDay(day);
         setModalOpen(true);
     };
 
     const handleActivityAdded = async (activityId, customActivityName) => {
+        if (!isAuthenticated) {
+            showAuthAlert();
+            return;
+        }
         try {
             if (activityId) {
                 await calendarService.addDatabaseActivity(activityId, selectedDay);
@@ -58,6 +76,10 @@ const Calendar = () => {
     };
 
     const handleStatusChange = async (entryId, newStatus) => {
+        if (!isAuthenticated) {
+            showAuthAlert();
+            return;
+        }
         try {
             await calendarService.updateStatus(entryId, newStatus);
             await fetchCalendar();
@@ -68,16 +90,26 @@ const Calendar = () => {
     };
 
     const handleDelete = async (entryId) => {
-        try {
-            await calendarService.deleteEntry(entryId);
-            await fetchCalendar();
-        } catch (error) {
-            console.error('Failed to delete entry:', error);
-            alert('Failed to delete entry. Please try again.');
+        if (!isAuthenticated) {
+            showAuthAlert();
+            return;
+        }
+        if (window.confirm('Are you sure you want to remove this activity?')) {
+            try {
+                await calendarService.deleteEntry(entryId);
+                await fetchCalendar();
+            } catch (error) {
+                console.error('Failed to delete entry:', error);
+                alert('Failed to delete entry. Please try again.');
+            }
         }
     };
 
     const handleClearAll = async () => {
+        if (!isAuthenticated) {
+            showAuthAlert();
+            return;
+        }
         if (window.confirm('Are you sure you want to clear all activities from your calendar?')) {
             try {
                 await calendarService.clearAll();
@@ -107,45 +139,49 @@ const Calendar = () => {
         );
     }
 
-    if (error) {
-        return (
-            <div className="calendar-page">
-                <div className="error">{error}</div>
-            </div>
-        );
-    }
-
     return (
         <div className="calendar-page">
             <div className="calendar-container">
+                {!isAuthenticated && (
+                    <div className="auth-notice">
+                        <p>👋 You're viewing the calendar as a guest. <a href="/login">Login</a> or <a href="/register">register</a> to save and manage your activities.</p>
+                    </div>
+                )}
+
                 <div className="calendar-header">
                     <div>
                         <h1>My Weekly Calendar</h1>
                         <p>Plan and track your Montessori activities for the week</p>
                     </div>
-                    <button className="btn-clear-all" onClick={handleClearAll}>
+                    <button 
+                        className="btn-clear-all" 
+                        onClick={handleClearAll}
+                        disabled={!isAuthenticated}
+                    >
                         Clear All Activities
                     </button>
                 </div>
 
-                <div className="calendar-stats">
-                    <div className="stat">
-                        <span className="stat-value">{getTotalActivities()}</span>
-                        <span className="stat-label">Total Activities</span>
+                {isAuthenticated && (
+                    <div className="calendar-stats">
+                        <div className="stat">
+                            <span className="stat-value">{getTotalActivities()}</span>
+                            <span className="stat-label">Total Activities</span>
+                        </div>
+                        <div className="stat">
+                            <span className="stat-value">{getCompletedActivities()}</span>
+                            <span className="stat-label">Completed</span>
+                        </div>
+                        <div className="stat">
+                            <span className="stat-value">
+                                {getTotalActivities() > 0 
+                                    ? Math.round((getCompletedActivities() / getTotalActivities()) * 100) 
+                                    : 0}%
+                            </span>
+                            <span className="stat-label">Progress</span>
+                        </div>
                     </div>
-                    <div className="stat">
-                        <span className="stat-value">{getCompletedActivities()}</span>
-                        <span className="stat-label">Completed</span>
-                    </div>
-                    <div className="stat">
-                        <span className="stat-value">
-                            {getTotalActivities() > 0 
-                                ? Math.round((getCompletedActivities() / getTotalActivities()) * 100) 
-                                : 0}%
-                        </span>
-                        <span className="stat-label">Progress</span>
-                    </div>
-                </div>
+                )}
 
                 <div className="calendar-grid">
                     {DAYS_OF_WEEK.map(day => (
