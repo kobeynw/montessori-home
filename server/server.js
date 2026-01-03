@@ -19,6 +19,10 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Auth routes
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
 // Activity routes
 const activityRoutes = require('./routes/activities');
 app.use('/api/activities', activityRoutes);
@@ -29,6 +33,7 @@ app.use('/api/calendar', calendarRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+  console.error(err.stack);
   res.status(500).json({
     error: 'Something went wrong!',
     message: err.message

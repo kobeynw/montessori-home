@@ -4,9 +4,9 @@ class CalendarController {
     // Get user's calendar
     static async getCalendar(req, res) {
         try {
-            // For MVP, we'll use a hardcoded user ID since we don't have auth yet
-            // TODO: Replace with req.user.id once auth is implemented
-            const userId = 1;
+            // Get userId from authenticated user (set by auth middleware)
+            // If no auth middleware, fall back to hardcoded ID for testing
+            const userId = req.user?.userId || 1; // TODO: don't use hardcoded id
 
             const entries = await CalendarModel.getUserCalendar(userId);
 
@@ -42,7 +42,7 @@ class CalendarController {
     // Add activity to calendar
     static async addActivity(req, res) {
         try {
-            const userId = 1; // TODO: Replace with req.user.id
+            const userId = req.user?.userId || 1; // TODO: don't use hardcoded id
             const { activityId, customActivityName, dayOfWeek } = req.body;
 
             // Validate input
@@ -104,7 +104,7 @@ class CalendarController {
     // Update calendar entry status
     static async updateStatus(req, res) {
         try {
-            const userId = 1; // TODO: Replace with req.user.id
+            const userId = req.user?.userId || 1; // TODO: don't use hardcoded id
             const { id } = req.params;
             const { status } = req.body;
 
@@ -146,7 +146,7 @@ class CalendarController {
     // Delete calendar entry
     static async deleteEntry(req, res) {
         try {
-            const userId = 1; // TODO: Replace with req.user.id
+            const userId = req.user?.userId || 1; // TODO: don't use hardcoded id
             const { id } = req.params;
 
             const deleted = await CalendarModel.deleteEntry(id, userId);
@@ -175,7 +175,7 @@ class CalendarController {
     // Clear all calendar entries
     static async clearAll(req, res) {
         try {
-            const userId = 1; // TODO: Replace with req.user.id
+            const userId = req.user?.userId || 1; // TODO: don't use hardcoded id
 
             const deletedCount = await CalendarModel.clearAllEntries(userId);
 
